@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<title>Covid-19</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="css/style.css" rel="stylesheet" type="text/css"/>
+<link href="css/fontcss.css" rel="stylesheet" type="text/css"/>
+<link href="css/themecss.css" rel="stylesheet" type="text/css"/>
+<link href="css/highwaycolor.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+     
+        <style>
+body,h1 {font-family: "Raleway", sans-serif}
+body, html {height: 100%}
+.bgimg {
+  background-image: url('pic/covid19.jpg');
+  min-height: 100%;
+  background-position: center;
+  background-size: cover;
+}
+h1{text-align: center;}
+</style>
+
+<body >
+
+    <header class="w3-display-container w3-black" id="header">
+  <div class="w3-padding-large w3-xlarge">
+      <h1 style="font-family: courier">Covid-19 Information Center</h1>
+  </div>
+</header>
+    <div class="w3-container bgimg w3-animate-opacity w3-grayscale ">
+  <div class="w3-center w3-display-middle w3-panel w3-card-4">
+      <h3 class="w3-animate-top w3-text-white">Enter the Country Name</h3><i class="w3-animate-top">(ex:INDIA,JAPAN etc..)</i>
+      <div>
+      <input type="text" id="datain"
+            placeholder="Search By City..."/>
+      <button class="w3-button w3-margin-left w3-highway-blue w3-hover-pale-red" id="btnn" onclick="document.getElementById('model').style.display='block'">show</button>
+      </div>
+  </div>
+        <div id="model" class="w3-modal" >
+    <div class="w3-modal-content">
+      <header class="w3-container w3-black w3-text-white"> 
+        <span onclick="document.getElementById('model').style.display='none'" 
+        class="w3-button w3-display-topright">&times;</span>
+        <h2>Country name, <span id="data1" style="font-size: 50px;"></span> </h2>
+      </header>
+      <div class="w3-container">
+          <table class="w3-table">
+              
+              <tr>
+                  <td>Total Confirmed Cases</td>
+                  <td id="data2">Value...</td>
+              </tr>
+              <tr>
+                  <td>Today's Confirmed Cases</td>
+                  <td id="data3">Value..</td>
+              </tr>
+              <tr>
+                  <td>Total Death</td>
+                  <td id="data4">Value...</td>
+              </tr>
+              <tr>
+                  <td>Today's Recovery</td>
+                  <td id="data6">Value..</td>
+              </tr>
+               <tr>
+                  <td>Total Recovery</td>
+                  <td id="data5">Value..</td>
+              </tr>
+          </table>
+      </div>
+      <footer class="w3-container w3-black w3-text-white">
+        <p>Last Update.... <span id="data7"></script></span> </p>
+      </footer>
+    </div>
+  </div>
+</div>
+  <div class="w3-display-bottommiddle w3-padding-large">
+    Powered by <a href="#header" target="_blank">Sangam</a>
+  </div>
+</div>
+
+
+
+<script type="text/javascript">
+  let countryData
+  async function getcovidapi(ap){
+    const jsondata=await fetch('https://api.covid19api.com/summary');
+    const jsdata=await jsondata.json();
+    const Country_name=jsdata.Countries;
+    countryData = Country_name.find(item => { 
+      const regex = new RegExp(`^${ap}`, 'gi');
+      return item.Country.match(regex) || item.CountryCode.match(regex);
+    });
+    const country= countryData.Country;
+    const totalcon= countryData.TotalConfirmed;
+    const newcon= countryData.NewConfirmed;
+    const totaldeath= countryData.TotalDeaths;
+    const totalrec= countryData.TotalRecovered;
+    const todayrec= countryData.NewRecovered;
+    const date=countryData.Date;
+    document.getElementById('data1').innerHTML=country;
+    document.getElementById('data2').innerHTML=totalcon;
+    document.getElementById('data3').innerHTML=newcon;
+    document.getElementById('data4').innerHTML=totaldeath;
+    document.getElementById('data5').innerHTML=totalrec;
+    document.getElementById('data6').innerHTML=todayrec;
+     document.getElementById('data7').innerHTML=date;
+    console.log(ap);
+    console.log(countryData);
+    
+}
+</script>
+<script>
+
+$(document).ready(function(){
+        // Get value on button click and show alert
+        $("#btnn").click(function(){
+            var str = $("#datain").val();
+            getcovidapi(str);
+        });
+    });
+
+</script>
+    
+</body>
+</html>
+
